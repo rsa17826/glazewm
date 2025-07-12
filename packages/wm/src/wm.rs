@@ -519,6 +519,7 @@ impl WindowManager {
 
           Ok(())
         }
+
         _ => Ok(()),
       },
       InvokeCommand::SetMinimized => {
