@@ -309,9 +309,11 @@ impl NativeWindow {
     let position = self.frame_position()?;
 
     // Allow for 1px of leeway around edges of monitor.
+    // !! cant find how to read from config hereBar height
+    let bar_height = 30;
     Ok(
       position.left <= monitor_rect.left + 1
-        && position.top <= monitor_rect.top + 1
+        && position.top <= monitor_rect.top + bar_height + 1
         && position.right >= monitor_rect.right - 1
         && position.bottom >= monitor_rect.bottom - 1,
     )
@@ -785,15 +787,38 @@ impl NativeWindow {
       }
       _ => {
         swp_flags |= SWP_FRAMECHANGED;
+        println!(
+          "Fullscreen state with maximized=false and shown_on_top=true"
+        );
+        // let cfg = ParsedConfig::default();
+        // let bar_height = cfg.window_behavior.bar_height;
+
+        // !! cant find how to read from config hereBar height
+        let bar_height = 30;
+        // println!("Bar height: {}", bar_height);
+
+        let (x, y, width, height) =
+          if let WindowState::Fullscreen(config) = state {
+            (
+              rect.x(),
+              rect.y() + bar_height,
+              rect.width(),
+              rect.height() - bar_height,
+            )
+            // (rect.x(), rect.y(), rect.width(), rect.height())
+          } else {
+            (rect.x(), rect.y(), rect.width(), rect.height())
+          };
 
         unsafe {
+          println!("maximized, {:?}", state);
           SetWindowPos(
             HWND(self.handle),
             z_order,
-            rect.x(),
-            rect.y(),
-            rect.width(),
-            rect.height(),
+            x,
+            y,
+            width,
+            height,
             swp_flags,
           )
         }?;

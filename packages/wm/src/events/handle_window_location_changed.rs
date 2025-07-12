@@ -87,7 +87,7 @@ pub fn handle_window_location_changed(
         // edge case of fullscreen -> maximized -> restore from maximized.
         if (fullscreen_state.maximized || !is_fullscreen) && !is_maximized
         {
-          info!("Window restored from fullscreen: {window}");
+          info!("Window restored from fullscreen: {window}, {}, {}, {}", fullscreen_state.maximized, is_fullscreen, is_maximized);
 
           let target_state = window
             .prev_state()

@@ -151,6 +151,7 @@ pub struct KeybindingConfig {
 pub struct WindowBehaviorConfig {
   /// New windows are created in this state whenever possible.
   pub initial_state: InitialWindowState,
+  pub bar_height: i32,
 
   /// Sets the default options for when a new window is created. This also
   /// changes the defaults for when the state change commands, like
